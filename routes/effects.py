@@ -1,10 +1,9 @@
 from typing import List
-
 from fastapi import APIRouter, Query, Path
 from starlette import status
 from models.effects import effects
 
-router = APIRouter(prefix="/effects")
+router = APIRouter(prefix="/effects", tags=["Effect Routes"])
 
 
 @router.get("", status_code=status.HTTP_200_OK)
@@ -15,6 +14,15 @@ async def get_all_effects():
 @router.post("/new", status_code=status.HTTP_201_CREATED)
 async def create_effect(effect: dict):
     effects.append(effect)
+
+
+@router.get("/avg")
+async def get_day_avg(foreign_key: int = Query()):
+    day_effects_rate = []
+    for effect in effects:
+        if effect.get("foreign-key") == int(foreign_key):
+            day_effects_rate.append(effect.get("rate"))
+    return sum(day_effects_rate) / len(day_effects_rate) if day_effects_rate else 0
 
 
 @router.get("/foreign_key/{foreign_key}", status_code=status.HTTP_200_OK)
