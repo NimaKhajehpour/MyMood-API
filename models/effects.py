@@ -1,8 +1,11 @@
-effects = [
-    {"id": 1, "time": "22:01", "rate": 2, "description": "Hello", "foreign-key": 1},
-    {"id": 2, "time": "20:01", "rate": 4, "description": "Hi", "foreign-key": 2},
-    {"id": 3, "time": "02:01", "rate": 1, "description": "No", "foreign-key": 2},
-    {"id": 4, "time": "12:01", "rate": 2, "description": "Wow", "foreign-key": 3},
-    {"id": 5, "time": "14:01", "rate": 0, "description": "Yaya", "foreign-key": 3},
-    {"id": 6, "time": "08:01", "rate": 3, "description": "baaad", "foreign-key": 1},
-]
+from typing import Optional
+from sqlmodel import SQLModel, Field, ForeignKey
+
+
+class Effect(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True, index=True)
+    time: str = Field(default=None)
+    rate: int = Field(gt=-1, lt=5)
+    description: str = Field(min_length=5, max_length=100)
+    foreign_key: int = Field(ForeignKey("day.id"))
+
