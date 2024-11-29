@@ -1,0 +1,6 @@
+# TODO: make sure body has the correct validation
+# TODO: make more components to have more re-usability
+# TODO: make user and authentication
+# TODO: implement them in database and other tables as well as routes
+# TODO: start developing the application and implementing the api and make sure to save user data
+# TODO: maybe make separate request body objects to make sure no extra data is added

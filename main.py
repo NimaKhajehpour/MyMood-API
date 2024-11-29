@@ -17,4 +17,4 @@ app.include_router(effects_router)
 app.include_router(days_router)
 
 
-
+# TODO: for running the app publicly in all the devices on the network do ipconfig
