@@ -1,8 +1,8 @@
 from models.days import Day
 from fastapi import APIRouter, Path, Query, HTTPException
 from starlette import status
-# from routes.effects import delete_day_effects, delete_all_effects
 from di.injection import db_dependency
+from models.effects import Effect
 
 router = APIRouter(prefix="/days", tags=["Day Routes"])
 
@@ -59,12 +59,12 @@ async def delete_day_by_id(db: db_dependency, day_id: int = Path(gt=0)):
     if not day:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Day not found")
     db.query(Day).filter(Day.id == day_id).delete()
+    db.query(Effect).filter(Effect.foreign_key == day_id).delete(synchronize_session=False)
     db.commit()
-    # await delete_day_effects(id)
 
 
 @router.delete("", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_all_days(db: db_dependency):
     db.query(Day).delete(synchronize_session=False)
+    db.query(Effect).delete(synchronize_session=False)
     db.commit()
-#   await delete_all_effects()
