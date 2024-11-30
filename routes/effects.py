@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Query, Path, HTTPException
 from starlette import status
-from models.effects import Effect
+from models.effects import Effect, CreateEffectRequest, UpdateEffectRequest
 from di.injection import db_dependency
 from sqlmodel import func
 
@@ -14,8 +14,8 @@ async def get_all_effects(db: db_dependency):
 
 
 @router.post("/new", status_code=status.HTTP_201_CREATED)
-async def create_effect(db: db_dependency, effect: Effect):
-    new_effect = Effect(**effect.model_dump(exclude={"id"}))
+async def create_effect(db: db_dependency, effect: CreateEffectRequest):
+    new_effect = Effect(**effect.model_dump())
     db.add(new_effect)
     db.commit()
 
@@ -38,7 +38,7 @@ async def query_effects(db: db_dependency, rate: List[int]):
 
 
 @router.put("/id/{effect_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_effect(db: db_dependency, updated_effect: Effect, effect_id: int = Path(gt=0)):
+async def update_effect(db: db_dependency, updated_effect: UpdateEffectRequest, effect_id: int = Path(gt=0)):
     effect = db.query(Effect).filter(Effect.id == effect_id).first()
     if not effect:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="effect not found")

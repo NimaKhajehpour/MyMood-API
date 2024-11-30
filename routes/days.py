@@ -1,15 +1,16 @@
-from models.days import Day
+from models.days import Day, CreateUpdateDayRequest, UpdateDayRequest
 from fastapi import APIRouter, Path, Query, HTTPException
 from starlette import status
 from di.injection import db_dependency
 from models.effects import Effect
+from utils.constants import date_regex_pattern
 
 router = APIRouter(prefix="/days", tags=["Day Routes"])
 
 
 @router.post("/new", status_code=status.HTTP_201_CREATED)
-async def create_day(day: Day, db: db_dependency):
-    new_day = Day(**day.model_dump(exclude={"id"}))
+async def create_day(day: CreateUpdateDayRequest, db: db_dependency):
+    new_day = Day(**day.model_dump())
     existing_day = db.query(Day).filter(Day.date == new_day.date).first()
     if existing_day:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Day already exists!")
@@ -18,7 +19,7 @@ async def create_day(day: Day, db: db_dependency):
 
 
 @router.get("/date", status_code=status.HTTP_200_OK)
-async def get_day_by_date(db: db_dependency, date: str = Query(regex=r"^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/([0-9]{4})$")):
+async def get_day_by_date(db: db_dependency, date: str = Query(regex=date_regex_pattern)):
     day = db.query(Day).filter(Day.date == date).first()
     if not day:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Day with the provided date is not found!")
@@ -39,11 +40,10 @@ async def get_all_days(db: db_dependency):
 
 
 @router.put("/id/{day_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_day(db: db_dependency, updated_day: Day, day_id: int = Path(gt=0)):
+async def update_day(db: db_dependency, updated_day: UpdateDayRequest, day_id: int = Path(gt=0)):
     day = db.query(Day).filter(Day.id == day_id).first()
     if not day:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Day not found")
-    day.date = updated_day.date
     day.red = updated_day.red
     day.green = updated_day.green
     day.blue = updated_day.blue
