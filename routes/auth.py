@@ -7,7 +7,6 @@ from di.injection import db_dependency, form_data_injection
 from models.User import UserRequest, User
 from models.token import Token
 
-
 router = APIRouter(
     prefix="/auth",
     tags=["Auth"]
@@ -20,8 +19,8 @@ async def create_user(db: db_dependency, create_user: UserRequest):
     if user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Username already exists")
     user_model = User(
-        username = create_user.username,
-        password = bcrypt_context.hash(create_user.password)
+        username=create_user.username,
+        password=bcrypt_context.hash(create_user.password)
     )
 
     db.add(user_model)
