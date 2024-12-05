@@ -12,6 +12,7 @@ class Effect(SQLModel, table=True):
     rate: int
     description: str
     foreign_key: int = Field(ForeignKey("day.id"))
+    owner: int = Field(ForeignKey("user.id"))
 
 
 class CreateEffectRequest(BaseModel):

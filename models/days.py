@@ -1,19 +1,19 @@
 from typing import Optional
-
 from pydantic import BaseModel, Field as pyField
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, ForeignKey
 
 from utils.constants import date_regex_pattern
 
 
 class Day(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True, index=True)
-    date: str = Field(default=None, unique=True)
+    date: str = Field(default=None)
     red: int
     green: int
     blue: int
     rate: int
     auto_rate: bool
+    owner: int = Field(ForeignKey("user.id"))
 
 
 class UpdateDayRequest(BaseModel):
@@ -24,7 +24,7 @@ class UpdateDayRequest(BaseModel):
     auto_rate: Optional[bool] = pyField(default=False)
 
 
-class CreateUpdateDayRequest(BaseModel):
+class CreateDayRequest(BaseModel):
     date: str = pyField(pattern=date_regex_pattern)
     red: int = pyField(gt=-1, lt=256)
     green: int = pyField(gt=-1, lt=256)

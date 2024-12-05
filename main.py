@@ -4,6 +4,7 @@ from sqlmodel import SQLModel
 from database.database import engine
 from routes.effects import router as effects_router
 from routes.days import router as days_router
+from routes.auth import router as auth_router
 
 app = FastAPI()
 
@@ -15,6 +16,7 @@ def on_startup():
 
 app.include_router(effects_router)
 app.include_router(days_router)
+app.include_router(auth_router)
 
 
 # TODO: for running the app publicly in all the devices on the network do ipconfig
