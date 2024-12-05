@@ -1,5 +1,6 @@
 from typing import Annotated
 
+from di.user_dependency import user_dependency
 from models.days import Day, CreateDayRequest, UpdateDayRequest
 from fastapi import APIRouter, Path, Query, HTTPException, Depends
 from starlette import status
@@ -9,7 +10,6 @@ from utils.auth_utils import get_current_user
 from utils.constants import date_regex_pattern
 
 router = APIRouter(prefix="/days", tags=["Day Routes"])
-user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
 @router.post("/new", status_code=status.HTTP_201_CREATED)

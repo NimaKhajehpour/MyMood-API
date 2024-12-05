@@ -2,6 +2,7 @@ from typing import List, Annotated
 from fastapi import APIRouter, Query, Path, HTTPException, Depends
 from starlette import status
 
+from di.user_dependency import user_dependency
 from models.days import Day
 from models.effects import Effect, CreateEffectRequest, UpdateEffectRequest
 from di.injection import db_dependency
@@ -9,7 +10,6 @@ from utils.auth_utils import get_current_user
 from sqlmodel import func
 
 router = APIRouter(prefix="/effects", tags=["Effect Routes"])
-user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
 @router.get("", status_code=status.HTTP_200_OK)
