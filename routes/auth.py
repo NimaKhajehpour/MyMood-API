@@ -26,7 +26,7 @@ async def create_user(db: db_dependency, create_user: UserRequest):
     db.add(user_model)
     db.commit()
     signed_up_user = authenticate_user(create_user.username, create_user.password, db)
-    token = create_access_token(signed_up_user.username, signed_up_user.id, timedelta(days=20))
+    token = create_access_token(signed_up_user.username, signed_up_user.id, signed_up_user.role, timedelta(days=20))
     return {"access_token": token, 'token_type': 'Bearer'}
 
 
@@ -35,5 +35,5 @@ async def login_for_access_token(form_data: form_data_injection, db: db_dependen
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Credentials")
-    token = create_access_token(user.username, user.id, timedelta(days=20))
+    token = create_access_token(user.username, user.id, user.role, timedelta(days=20))
     return {'access_token': token, 'token_type': 'Bearer'}
