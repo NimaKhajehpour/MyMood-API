@@ -9,6 +9,7 @@ from routes.effects import router as effects_router
 from routes.days import router as days_router
 from routes.auth import router as auth_router
 from routes.news import router as news_router
+from routes.admin import admin_news_router, admin_bugs_router
 
 import os
 from dotenv import load_dotenv
@@ -39,6 +40,8 @@ app.include_router(effects_router)
 app.include_router(days_router)
 app.include_router(auth_router)
 app.include_router(news_router)
+app.include_router(admin_news_router)
+app.include_router(admin_bugs_router)
 
 
 # TODO: for running the app publicly in all the devices on the network do ipconfig
