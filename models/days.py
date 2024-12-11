@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field as pyField
 from sqlmodel import Field, SQLModel, ForeignKey
+from models.effects import Effect
 
 from utils.constants import date_regex_pattern
 
@@ -31,3 +32,12 @@ class CreateDayRequest(BaseModel):
     blue: int = pyField(gt=-1, lt=256)
     rate: int = pyField(gt=-1, lt=5)
     auto_rate: bool = pyField(default=False)
+
+
+class DaysEffectsModel(BaseModel):
+    day: Day
+    effects: list[Effect]
+
+
+class DaysOverviewModel(BaseModel):
+    data: list[DaysEffectsModel]

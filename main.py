@@ -12,6 +12,7 @@ from routes.news import router as news_router
 from routes.admin import admin_news_router, admin_bugs_router, admin_suggestions_router, admin_users_router
 from routes.bugs import router as bugs_router
 from routes.suggestions import router as suggestion_routes
+from routes.users import router as user_router
 
 import os
 from dotenv import load_dotenv
@@ -48,6 +49,7 @@ app.include_router(admin_news_router)
 app.include_router(admin_bugs_router)
 app.include_router(admin_suggestions_router)
 app.include_router(admin_users_router)
+app.include_router(user_router)
 
 
 # TODO: for running the app publicly in all the devices on the network do ipconfig

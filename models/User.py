@@ -12,3 +12,9 @@ class User(SQLModel, table = True):
 class UserRequest(BaseModel):
     username: str = pyField(min_length=3, max_length=16, pattern=r"^[a-zA-Z][a-zA-Z0-9_]{2,15}$")
     password: str = pyField(pattern=r"^[A-Za-z\d@$!%*?&]{8,}$", min_length=8)
+
+
+class UpdateUserPasswordRequest(BaseModel):
+    current_password: str = pyField(pattern=r"^[A-Za-z\d@$!%*?&]{8,}$", min_length=8)
+    new_password: str = pyField(pattern=r"^[A-Za-z\d@$!%*?&]{8,}$", min_length=8)
+    confirm_password: str = pyField(pattern=r"^[A-Za-z\d@$!%*?&]{8,}$", min_length=8)

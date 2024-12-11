@@ -101,3 +101,4 @@ async def delete_all_effects(user: user_dependency, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized")
     db.query(Effect).filter(Effect.owner == user.get('id')).delete(synchronize_session=False)
+    db.commit()
